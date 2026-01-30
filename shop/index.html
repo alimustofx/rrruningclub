@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | RRR Running Club</title>
+    <link rel="icon" type="image/x-icon" href="/assets/logorrr.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon': '#D9FF00',
+                        'black-matte': '#0a0a0a',
+                        'charcoal': '#171717',
+                    },
+                    fontFamily: {
+                        'display': ['Anton', 'sans-serif'],
+                        'body': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* MAIN BACKGROUND TEXTURE */
+        body { 
+            background-color: #0a0a0a; 
+            color: white; 
+            cursor: none;
+            background-image: linear-gradient(rgba(10,10,10,0.85), rgba(10,10,10,0.9)), url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+            background-attachment: fixed; 
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        /* Custom Cursor */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: #D9FF00; }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(217, 255, 0, 0.5); transition: width 0.2s, height 0.2s; }
+        
+        /* Disable cursor on touch devices */
+        @media (hover: none) {
+            .cursor-dot, .cursor-outline { display: none; }
+            body { cursor: auto; }
+        }
+
+        body:hover .cursor-outline { opacity: 1; }
+        a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 60px; height: 60px; background: rgba(217, 255, 0, 0.1); }
+
+        /* Mobile Menu Transition */
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-neon selection:text-black min-h-screen">
+
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[35vw] font-display text-white/5 pointer-events-none select-none z-0 tracking-tighter leading-none">
+        MERCH
+    </div>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] transform translate-x-full flex flex-col justify-center items-center space-y-8 md:hidden">
+        <button id="close-menu" class="absolute top-6 right-6 text-white text-4xl p-2 hover:text-neon transition"><i class="fas fa-times"></i></button>
+        <a href="/" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110">Home</a>
+        <a href="/shop" class="text-5xl font-display uppercase text-neon transition-all hover:scale-110">Shop</a>
+        <a href="/events" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110">Events</a>
+        <a href="/gallery" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110">Gallery</a>
+    </div>
+
+    <nav class="fixed w-full z-50 backdrop-blur-md border-b border-white/5 bg-black/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
+            
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/logorrr.png" alt="RRR Logo" class="h-8 md:h-10 w-auto object-contain">
+                <span class="text-2xl md:text-3xl font-display uppercase tracking-wider text-white">RRR<span class="text-neon">.CLUB</span></span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-12">
+                <a href="/" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Home</a>
+                <a href="/shop" class="text-sm font-bold uppercase tracking-widest text-neon">Shop</a>
+                <a href="/events" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Events</a>
+                <a href="/gallery" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Gallery</a>
+            </div>
+
+            <div class="md:hidden text-white cursor-pointer p-2 z-50" id="hamburger-btn">
+                <i class="fas fa-bars text-2xl"></i>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-32 md:pt-48 pb-20 px-6 text-center border-b border-white/10 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1596727147705-54a9d09f3f78?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-b from-black-matte via-black-matte/80 to-black-matte"></div>
+        </div>
+
+        <div class="relative z-10">
+            <h1 class="text-6xl md:text-9xl font-display uppercase italic text-white leading-none tracking-tight">
+                The <span class="text-transparent stroke-white" style="-webkit-text-stroke: 2px #D9FF00; color: transparent;">Drop</span>
+            </h1>
+            <p class="text-gray-400 mt-6 uppercase tracking-[0.5em] text-xs md:text-sm font-bold">Official RRR Running Club Merch</p>
+        </div>
+    </section>
+
+    <section class="px-6 py-12 relative z-10">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-center gap-4">
+            <button onclick="filterProducts('all')" class="filter-btn active px-8 py-3 border border-neon bg-neon text-black font-black uppercase text-xs tracking-widest hover:bg-white hover:border-white hover:scale-105 transition transform">All Items</button>
+            <button onclick="filterProducts('apparel')" class="filter-btn px-8 py-3 border border-white/20 bg-black/50 backdrop-blur-sm text-gray-400 font-bold uppercase text-xs tracking-widest hover:border-neon hover:text-neon transition">Apparel</button>
+            <button onclick="filterProducts('accessories')" class="filter-btn px-8 py-3 border border-white/20 bg-black/50 backdrop-blur-sm text-gray-400 font-bold uppercase text-xs tracking-widest hover:border-neon hover:text-neon transition">Accessories</button>
+        </div>
+    </section>
+
+    <section class="pb-24 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 md:gap-y-20" id="product-grid">
+
+            <div class="product-item group" data-category="apparel">
+                <div class="relative overflow-hidden aspect-[4/5] bg-gray-900 border border-white/10 mb-6">
+                    <img src="/shop/dodolan/jersey1.png" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 grayscale group-hover:grayscale-0">
+                    <div class="absolute top-4 left-4 bg-neon text-black text-[10px] font-black uppercase px-2 py-1">Best Seller</div>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-2xl font-display uppercase text-white group-hover:text-neon transition">Main Jersey</h3>
+                        <p class="text-gray-500 text-xs uppercase tracking-wider mt-1">First Edition</p>
+                    </div>
+                    <span class="text-white font-bold text-lg border-b-2 border-neon pb-1">Rp 150.000</span>
+                </div>
+            </div>
+
+            <div class="product-item group" data-category="apparel">
+                <div class="relative overflow-hidden aspect-[4/5] bg-gray-900 border border-white/10 mb-6">
+                    <img src="/shop/dodolan/jersey2.png" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 grayscale group-hover:grayscale-0">
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-2xl font-display uppercase text-white group-hover:text-neon transition">Triple-R</h3>
+                        <p class="text-gray-500 text-xs uppercase tracking-wider mt-1">Heavyweight Cotton</p>
+                    </div>
+                    <span class="text-white font-bold text-lg border-b-2 border-neon pb-1">Rp 199.000</span>
+                </div>
+            </div>
+
+            <div class="product-item group" data-category="accessories">
+                <div class="relative overflow-hidden aspect-[4/5] bg-gray-900 border border-white/10 mb-6">
+                    <img src="/shop/dodolan/bandana.png" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 grayscale group-hover:grayscale-0">
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-2xl font-display uppercase text-white group-hover:text-neon transition">Scarf</h3>
+                        <p class="text-gray-500 text-xs uppercase tracking-wider mt-1">Poliester</p>
+                    </div>
+                    <span class="text-white font-bold text-lg border-b-2 border-neon pb-1">Rp 49.000</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-black py-16 border-t border-white/10 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            
+            <div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                <img src="/assets/logorrr.png" alt="RRR Logo" class="h-10 md:h-12 w-auto object-contain">
+                <div>
+                    <a href="/" class="text-3xl md:text-4xl font-display uppercase italic text-white hover:text-white">RRR<span class="text-neon">.CLUB</span></a>
+                    <p class="text-gray-500 text-xs uppercase tracking-widest mt-2">South Malang, Indonesia</p>
+                </div>
+            </div>
+
+            <div class="flex gap-6">
+                <a href="https://www.instagram.com/run.r3n_run" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-neon hover:text-black hover:border-neon transition"><i class="fab fa-instagram text-lg md:text-xl"></i></a>
+                <a href="https://www.tiktok.com/@run.r3n_run" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-neon hover:text-black hover:border-neon transition"><i class="fab fa-tiktok text-lg md:text-xl"></i></a>
+                <a href="https://open.spotify.com/user/31viteyj6wkfglehnm6rfc5l4ji4?si=ccda9369c2584d8b&nd=1&dlsi=f767dabe86a44db3" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-[#1DB954] hover:text-black hover:border-[#1DB954] transition"><i class="fab fa-spotify text-lg md:text-xl"></i></a>
+                <a href="mailto:triple3run@gmail.com" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white transition"><i class="fas fa-envelope text-lg md:text-xl"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-12 text-gray-700 text-xs uppercase tracking-widest">© 2026 RRR Running Club. All Rights Reserved.</div>
+    </footer>
+
+    <script>
+        // --- MOBILE MENU LOGIC (NEW) ---
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('overflow-hidden'); // Prevent background scrolling
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+
+        // --- CUSTOM CURSOR LOGIC ---
+        const cursorDot = document.getElementById("cursor-dot");
+        const cursorOutline = document.getElementById("cursor-outline");
+        window.addEventListener("mousemove", function (e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
+        });
+
+        // --- FILTER FUNCTIONALITY ---
+        function filterProducts(category) {
+            let items = document.querySelectorAll('.product-item');
+            
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                    setTimeout(() => item.style.opacity = '1', 50);
+                } else {
+                    item.style.display = 'none';
+                    item.style.opacity = '0';
+                }
+            });
+
+            let buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-neon', 'text-black', 'border-neon');
+                btn.classList.add('border-white/20', 'text-gray-400', 'bg-black/50');
+            });
+
+            buttons.forEach(btn => {
+                if(btn.getAttribute('onclick').includes(category)) {
+                    btn.classList.remove('border-white/20', 'text-gray-400', 'bg-black/50');
+                    btn.classList.add('bg-neon', 'text-black', 'border-neon');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

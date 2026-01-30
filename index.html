@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RRR Running Club | South Malang</title>
+    <link rel="icon" type="image/x-icon" href="/assets/logorrr.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon': '#D9FF00',
+                        'black-matte': '#0a0a0a',
+                        'charcoal': '#171717',
+                    },
+                    fontFamily: {
+                        'display': ['Anton', 'sans-serif'],
+                        'body': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'slow-zoom': 'zoom 20s infinite alternate',
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        zoom: {
+                            '0%': { transform: 'scale(1)' },
+                            '100%': { transform: 'scale(1.15)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* ASPHALT TEXTURE BACKGROUND */
+        body { 
+            background-color: #0a0a0a; 
+            color: white; 
+            cursor: none;
+            background-image: linear-gradient(rgba(5,5,5,0.85), rgba(5,5,5,0.95)), url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+            background-attachment: fixed; 
+            overflow-x: hidden; 
+        }
+        
+        /* Custom Cursor */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: #D9FF00; }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(217, 255, 0, 0.5); transition: width 0.2s, height 0.2s; }
+        
+        /* Disable custom cursor on touch devices to prevent bugs */
+        @media (hover: none) {
+            .cursor-dot, .cursor-outline { display: none; }
+            body { cursor: auto; }
+        }
+        
+        body:hover .cursor-outline { opacity: 1; }
+        a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 60px; height: 60px; background: rgba(217, 255, 0, 0.1); }
+        
+        .text-outline { -webkit-text-stroke: 1px rgba(255,255,255,0.3); color: transparent; }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Smooth Mobile Menu Transition */
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-neon selection:text-black">
+
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] transform translate-x-full flex flex-col justify-center items-center space-y-8 md:hidden">
+        <button id="close-menu" class="absolute top-6 right-6 text-white text-4xl p-2 hover:text-neon transition"><i class="fas fa-times"></i></button>
+        <a href="/" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110" onclick="toggleMenu()">Home</a>
+        <a href="/shop" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110" onclick="toggleMenu()">Shop</a>
+        <a href="/events" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110" onclick="toggleMenu()">Events</a>
+        <a href="/gallery" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110" onclick="toggleMenu()">Gallery</a>
+    </div>
+
+    <nav class="fixed w-full z-50 backdrop-blur-md border-b border-white/5 bg-black/50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
+            
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/logorrr.png" alt="RRR Logo" class="h-8 md:h-10 w-auto object-contain">
+                <span class="text-2xl md:text-3xl font-display uppercase tracking-wider text-white">RRR<span class="text-neon">.CLUB</span></span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-12">
+                <a href="/" class="text-sm font-bold uppercase tracking-widest text-neon">Home</a>
+                <a href="/shop" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Shop</a>
+                <a href="/events" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Events</a>
+                <a href="/gallery" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Gallery</a>
+            </div>
+
+            <div class="md:hidden text-white cursor-pointer z-50 p-2" id="hamburger-btn">
+                <i class="fas fa-bars text-2xl"></i>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative w-full h-[55vh] md:h-screen flex flex-col justify-center items-center overflow-hidden">
+        
+        <div class="absolute inset-0 z-0">
+            <img src="/assets/header.jpg" class="w-full h-full object-cover object-center grayscale opacity-60 md:animate-slow-zoom">
+            <div class="absolute inset-0 bg-gradient-to-t from-black-matte via-black-matte/20 to-black-matte/30"></div>
+        </div>
+        
+        <div class="relative z-10 text-center px-4 max-w-5xl mt-12 md:mt-0">
+            <p class="text-neon font-bold tracking-[0.3em] text-xs md:text-sm mb-2 md:mb-4 animate-pulse">SOUTH MALANG CHAPTER</p>
+            
+            <h1 class="text-[15vw] md:text-[9rem] font-display uppercase italic leading-[0.85] md:leading-[0.8] text-white drop-shadow-2xl">
+                WE RUN <br><span class="text-outline">TOGETHER</span>
+            </h1>
+            
+            <div class="mt-6 md:mt-10">
+                <a href="https://chat.whatsapp.com/KszLKH6VvglEmzsfZiu2Ss?fbclid=PAZXh0bgNhZW0CMTEAAafiRvv2SwG2xRbyW3ceaEIhBt9J-UItqKKLo9ti_jKbZB32ORC9tQ4DTThvFw_aem_t_qcv8wBsWlW8TDum5lg8A" target="_blank" class="inline-flex items-center gap-2 md:gap-3 bg-[#25D366] text-black px-5 md:px-8 py-3 md:py-4 rounded-full font-black uppercase text-xs md:text-lg hover:bg-white transition transform hover:scale-105 shadow-[0_0_20px_rgba(37,211,102,0.5)]">
+                    <i class="fab fa-whatsapp text-lg md:text-2xl"></i> Join The Group
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="bg-neon text-black py-3 overflow-hidden border-y border-black relative z-20 rotate-1 md:rotate-1 shadow-[0_0_15px_rgba(217,255,0,0.5)]">
+        <div class="whitespace-nowrap flex animate-marquee font-display text-lg md:text-2xl uppercase tracking-widest">
+            <span class="mx-4 md:mx-8">/// SOUTH MALANG RUNNING</span>
+            <span class="mx-4 md:mx-8">/// NO BOUNDARIES</span>
+            <span class="mx-4 md:mx-8">/// EVERY TUESDAY & FRIDAY</span>
+            <span class="mx-4 md:mx-8">/// ALL PACE WELCOME</span>
+            <span class="mx-4 md:mx-8">/// RRR CLUB</span>
+            <span class="mx-4 md:mx-8">/// SOUTH MALANG RUNNING</span>
+            <span class="mx-4 md:mx-8">/// NO BOUNDARIES</span>
+            <span class="mx-4 md:mx-8">/// EVERY TUESDAY & FRIDAY</span>
+            <span class="mx-4 md:mx-8">/// ALL PACE WELCOME</span>
+            <span class="mx-4 md:mx-8">/// RRR CLUB</span>
+        </div>
+    </div>
+
+    <section class="py-16 md:py-24 px-6 relative overflow-hidden">
+        <div class="absolute top-10 right-0 text-[30vw] font-display text-white/5 pointer-events-none leading-none opacity-20 select-none -translate-y-1/4 md:-translate-y-1/2 translate-x-1/4">RRR</div>
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="mb-12 md:mb-16 text-center md:text-left reveal">
+                <h2 class="text-5xl md:text-8xl font-display uppercase italic text-white leading-[0.9] mb-2">
+                    No <span class="text-neon">Boundaries!</span>
+                </h2>
+                <h2 class="text-3xl md:text-7xl font-display uppercase text-transparent stroke-white text-outline leading-[0.9]">
+                    All Runners Welcome
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-start">
+                
+                <div class="prose prose-lg prose-invert reveal">
+                    <p class="text-gray-300 font-light text-base md:text-lg leading-relaxed">
+                        Rooted in the streets of <strong class="text-white">South Malang</strong>, our run crew is built for everyone from elite runners chasing PR to total beginners lacing up for the first time. We believe running isn’t just a sport, it’s a <span class="text-neon font-bold italic">culture</span>.
+                    </p>
+                    <p class="text-gray-300 font-light text-base md:text-lg leading-relaxed mt-6">
+                        No dress codes, no gatekeeping—whether you show up in full race gear or vintage streetwear, whether you’re fast, slow, or just vibing—<strong class="text-white">you’re one of us.</strong>
+                    </p>
+                </div>
+
+                <div class="flex flex-col justify-center reveal">
+                    <div class="border-l-4 border-neon pl-6 md:pl-8 py-2">
+                        <p class="text-white text-lg md:text-xl font-medium leading-relaxed mb-6">
+                            We run twice a week, keeping the energy high and the routes fresh. And every month, we go bigger—throwing a special event that blends <span class="text-neon">movement, music, and community vibes.</span>
+                        </p>
+                        <p class="text-gray-400 text-sm tracking-wide uppercase">
+                            This isn’t just a crew, it’s a space where you can push your limits, find your rhythm, and connect with people who move with purpose.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16 md:mt-20 pt-12 border-t border-white/10 text-center reveal">
+                <p class="text-xl md:text-5xl font-display uppercase text-white leading-tight italic">
+                    We’re here to break the stereotype <br> of what a runner “should” look like.
+                </p>
+                <div class="mt-6 flex flex-col items-center gap-2">
+                    <span class="bg-neon text-black font-black uppercase px-4 py-2 text-sm md:text-lg transform -skew-x-12 inline-block hover:scale-110 transition duration-300 cursor-none">Come as you are, run how you want.</span>
+                    <p class="text-gray-500 uppercase tracking-widest text-[10px] md:text-xs mt-2">This is our lane and there’s always room for more.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-20 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 reveal">
+            <div class="border border-white/20 p-6 md:p-8 hover:border-neon transition group bg-black/40 backdrop-blur-sm">
+                <i class="fas fa-envelope text-3xl md:text-4xl text-white mb-4 group-hover:text-neon transition"></i>
+                <h3 class="text-xl md:text-2xl font-display uppercase text-white">Collaboration / Info</h3>
+                <p class="text-gray-400 mb-6 mt-2 text-sm md:text-base">Partner with RRR or ask about events.</p>
+                <a href="mailto:triple3run@gmail.com" class="text-neon font-bold uppercase tracking-widest hover:text-white text-sm md:text-base">Send Email -></a>
+            </div>
+            <div class="border border-white/20 p-6 md:p-8 hover:border-[#25D366] transition group bg-black/40 backdrop-blur-sm">
+                <i class="fab fa-whatsapp text-3xl md:text-4xl text-white mb-4 group-hover:text-[#25D366] transition"></i>
+                <h3 class="text-xl md:text-2xl font-display uppercase text-white">Contact Person</h3>
+                <p class="text-gray-400 mb-6 mt-2 text-sm md:text-base">Direct line for urgent inquiries.</p>
+                <a href="https://wa.me/62895346508484" class="text-[#25D366] font-bold uppercase tracking-widest hover:text-white text-sm md:text-base">Chat Now -></a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black py-12 md:py-16 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            
+            <div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                <img src="/assets/logorrr.png" alt="RRR Logo" class="h-10 md:h-12 w-auto object-contain">
+                <div>
+                    <a href="/" class="text-3xl md:text-4xl font-display uppercase italic text-white hover:text-white">RRR<span class="text-neon">.CLUB</span></a>
+                    <p class="text-gray-500 text-xs uppercase tracking-widest mt-2">South Malang, Indonesia</p>
+                </div>
+            </div>
+
+            <div class="flex gap-6">
+                <a href="https://www.instagram.com/run.r3n_run" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-neon hover:text-black hover:border-neon transition"><i class="fab fa-instagram text-lg md:text-xl"></i></a>
+                <a href="https://www.tiktok.com/@run.r3n_run" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-neon hover:text-black hover:border-neon transition"><i class="fab fa-tiktok text-lg md:text-xl"></i></a>
+                <a href="https://open.spotify.com/user/31viteyj6wkfglehnm6rfc5l4ji4?si=ccda9369c2584d8b&nd=1&dlsi=f767dabe86a44db3" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-[#1DB954] hover:text-black hover:border-[#1DB954] transition"><i class="fab fa-spotify text-lg md:text-xl"></i></a>
+                <a href="mailto:triple3run@gmail.com" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white transition"><i class="fas fa-envelope text-lg md:text-xl"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-12 text-gray-700 text-[10px] md:text-xs uppercase tracking-widest">© 2026 RRR Running Club. All Rights Reserved.</div>
+    </footer>
+
+    <script>
+        // --- MOBILE MENU LOGIC ---
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('overflow-hidden'); // Prevent background scrolling
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+
+        // --- CUSTOM CURSOR LOGIC ---
+        const cursorDot = document.getElementById("cursor-dot");
+        const cursorOutline = document.getElementById("cursor-outline");
+        window.addEventListener("mousemove", function (e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
+        });
+
+        // --- SCROLL REVEAL LOGIC ---
+        window.addEventListener('scroll', reveal);
+        function reveal(){
+            var reveals = document.querySelectorAll('.reveal');
+            for(var i = 0; i < reveals.length; i++){
+                var windowheight = window.innerHeight;
+                var revealtop = reveals[i].getBoundingClientRect().top;
+                var revealpoint = 150; 
+
+                if(revealtop < windowheight - revealpoint){
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

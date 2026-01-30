@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events | RRR Running Club</title>
+    <link rel="icon" type="image/x-icon" href="/assets/logorrr.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon': '#D9FF00',
+                        'black-matte': '#0a0a0a',
+                        'charcoal': '#171717',
+                    },
+                    fontFamily: {
+                        'display': ['Anton', 'sans-serif'],
+                        'body': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* MAIN BACKGROUND TEXTURE */
+        body { 
+            background-color: #0a0a0a; 
+            color: white; 
+            cursor: none;
+            /* Gritty Asphalt Texture */
+            background-image: linear-gradient(rgba(10,10,10,0.85), rgba(10,10,10,0.92)), url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+            background-attachment: fixed; 
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        /* Custom Cursor */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: #D9FF00; }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(217, 255, 0, 0.5); transition: width 0.2s, height 0.2s; }
+        
+        /* Disable cursor on touch devices */
+        @media (hover: none) {
+            .cursor-dot, .cursor-outline { display: none; }
+            body { cursor: auto; }
+        }
+
+        body:hover .cursor-outline { opacity: 1; }
+        a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 60px; height: 60px; background: rgba(217, 255, 0, 0.1); }
+
+        /* Ticket/Card Hover Effect */
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Animation for Load More */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Menu Transition */
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-neon selection:text-black min-h-screen">
+
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[35vw] font-display text-white/5 pointer-events-none select-none z-0 tracking-tighter leading-none">
+        RACE
+    </div>
+
+
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] transform translate-x-full flex flex-col justify-center items-center space-y-8 md:hidden">
+        <button id="close-menu" class="absolute top-6 right-6 text-white text-4xl p-2 hover:text-neon transition"><i class="fas fa-times"></i></button>
+        <a href="/" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110">Home</a>
+        <a href="/shop" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110">Shop</a>
+        <a href="/events" class="text-5xl font-display uppercase text-neon transition-all hover:scale-110">Events</a>
+        <a href="/gallery" class="text-5xl font-display uppercase text-white hover:text-neon transition-all hover:scale-110">Gallery</a>
+    </div>
+
+    <nav class="fixed w-full z-50 backdrop-blur-md border-b border-white/5 bg-black/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
+            
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/logorrr.png" alt="RRR Logo" class="h-8 md:h-10 w-auto object-contain">
+                <span class="text-2xl md:text-3xl font-display uppercase tracking-wider text-white">RRR<span class="text-neon">.CLUB</span></span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-12">
+                <a href="/" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Home</a>
+                <a href="/shop" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Shop</a>
+                <a href="/events" class="text-sm font-bold uppercase tracking-widest text-neon">Events</a>
+                <a href="/gallery" class="text-sm font-bold uppercase tracking-widest hover:text-neon transition-colors">Gallery</a>
+            </div>
+
+            <div class="md:hidden text-white cursor-pointer z-50 p-2" id="hamburger-btn">
+                <i class="fas fa-bars text-2xl"></i>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-32 md:pt-48 pb-20 px-6 text-center border-b border-white/10 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1532444458054-0188dd3e03d7?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-30">
+            <div class="absolute inset-0 bg-gradient-to-b from-black-matte via-black-matte/70 to-black-matte"></div>
+        </div>
+        <div class="relative z-10">
+            <h1 class="text-6xl md:text-9xl font-display uppercase italic text-white leading-none tracking-tight">
+                Race <span class="text-transparent stroke-white" style="-webkit-text-stroke: 2px #D9FF00; color: transparent;">Calendar</span>
+            </h1>
+            <p class="text-gray-400 mt-6 uppercase tracking-[0.3em] text-xs md:text-sm font-bold">South Malang Chapter</p>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 relative z-10">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-4xl font-display uppercase italic text-white mb-12 border-l-4 border-neon pl-4">
+                Upcoming 2026 <span class="text-neon">Agenda</span>
+                <span class="block text-sm font-body text-gray-500 not-italic font-bold tracking-widest mt-2">Don't Miss The Start Line</span>
+            </h2>
+
+            <div class="grid grid-cols-1 gap-8">
+                <div class="event-card group relative bg-white/5 backdrop-blur-sm border border-white/20 p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 hover:border-neon transition">
+                    <div class="flex flex-col items-center justify-center border border-white/20 w-24 h-24 md:w-32 md:h-32 bg-charcoal shrink-0 group-hover:bg-neon group-hover:text-black transition">
+                        <span class="text-sm uppercase tracking-widest">June</span>
+                        <span class="text-3xl md:text-5xl font-display uppercase">21</span>
+                    </div>
+
+                    <div class="flex-grow">
+                        <div class="flex items-center gap-4 mb-2">
+                            <span class="bg-white text-black text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-full">Official Race</span>
+                        </div>
+                        <h3 class="text-4xl md:text-5xl font-display uppercase italic text-white mb-2 group-hover:text-neon transition">Paolo Run Fest</h3>
+                        <p class="text-gray-400 max-w-lg">5k Morning Run ending with a coffee and fun breakfast. Join the RRR cheer zone or run with us.</p>
+                    </div>
+
+                    <div class="shrink-0 w-full md:w-auto">
+                        <a href="https://chat.whatsapp.com/KszLKH6VvglEmzsfZiu2Ss?fbclid=PAZXh0bgNhZW0CMTEAAafiRvv2SwG2xRbyW3ceaEIhBt9J-UItqKKLo9ti_jKbZB32ORC9tQ4DTThvFw_aem_t_qcv8wBsWlW8TDum5lg8A" class="inline-block w-full md:w-auto text-center border border-white px-8 py-4 text-white font-bold uppercase text-xs tracking-widest hover:bg-neon hover:text-black hover:border-neon transition">Join Trip</a>
+                    </div>
+                </div>
+
+                <div class="event-card group relative bg-white/5 backdrop-blur-sm border border-white/20 p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 hover:border-neon transition">
+                    <div class="flex flex-col items-center justify-center border border-white/20 w-24 h-24 md:w-32 md:h-32 bg-charcoal shrink-0 group-hover:bg-neon group-hover:text-black transition">
+                        <span class="text-sm uppercase tracking-widest">Feb</span>
+                        <span class="text-3xl md:text-5xl font-display uppercase">18</span>
+                    </div>
+
+                    <div class="flex-grow">
+                        <div class="flex items-center gap-4 mb-2">
+                            <span class="bg-white text-black text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-full">Collab Run</span>
+                        </div>
+                        <h3 class="text-4xl md:text-5xl font-display uppercase italic text-white mb-2 group-hover:text-neon transition">RRR x Ikilo Coffee</h3>
+                        <p class="text-gray-400 max-w-lg">10K Afternoon Run ending with free brew at Ikilo Caffe. Limited slots available.</p>
+                    </div>
+
+                    <div class="shrink-0 w-full md:w-auto">
+                        <a href="https://chat.whatsapp.com/KszLKH6VvglEmzsfZiu2Ss?fbclid=PAZXh0bgNhZW0CMTEAAafiRvv2SwG2xRbyW3ceaEIhBt9J-UItqKKLo9ti_jKbZB32ORC9tQ4DTThvFw_aem_t_qcv8wBsWlW8TDum5lg8A" class="inline-block w-full md:w-auto text-center border border-white px-8 py-4 text-white font-bold uppercase text-xs tracking-widest hover:bg-neon hover:text-black hover:border-neon transition">RSVP Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-6 relative z-10 border-t border-white/10 bg-black/40" id="archive-section">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-4xl font-display uppercase italic text-gray-500 mb-12 border-l-4 border-gray-700 pl-4">
+                The <span class="text-outline stroke-gray-500 text-transparent" style="-webkit-text-stroke: 1px #555;">Archive</span>
+                <span class="block text-sm font-body text-gray-600 not-italic font-bold tracking-widest mt-2">Past Glories & Recaps</span>
+            </h2>
+
+            <div id="archive-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <div class="border border-white/10 p-8 flex flex-col gap-4 bg-black-matte group hover:border-white/30 transition duration-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-neon text-xs font-bold uppercase tracking-widest block mb-1">Sept 27-28, 2025</span>
+                            <h3 class="text-3xl font-display uppercase text-white leading-none group-hover:text-gray-300">Nothing To Prove</h3>
+                        </div>
+                        <i class="fas fa-check-circle text-gray-700"></i>
+                    </div>
+                    <p class="text-gray-500 text-sm">5K Fun Run at Wedi Awu Beach.</p>
+                    <a href="/gallery" class="text-gray-500 text-xs font-bold uppercase tracking-widest hover:text-neon mt-2">View Gallery -></a>
+                </div>
+
+                <div class="border border-white/10 p-8 flex flex-col gap-4 bg-black-matte group hover:border-white/30 transition duration-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-neon text-xs font-bold uppercase tracking-widest block mb-1">August 17, 2025</span>
+                            <h3 class="text-3xl font-display uppercase text-white leading-none group-hover:text-gray-300">Road to Nothing Prove</h3>
+                        </div>
+                        <i class="fas fa-check-circle text-gray-700"></i>
+                    </div>
+                    <p class="text-gray-500 text-sm">RRR Running Club x Lancar Jaya Motor Turen at Lembah Asri Waterpark Turen</p>
+                    <a href="/gallery" class="text-gray-500 text-xs font-bold uppercase tracking-widest hover:text-neon mt-2">View Gallery -></a>
+                </div>
+
+                <div class="extra-item hidden border border-white/10 p-8 flex-col gap-4 bg-black-matte group hover:border-white/30 transition duration-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-neon text-xs font-bold uppercase tracking-widest block mb-1">July 6, 2025</span>
+                            <h3 class="text-3xl font-display uppercase text-white leading-none group-hover:text-gray-300">Road to Nothing Prove 15K</h3>
+                        </div>
+                        <i class="fas fa-check-circle text-gray-700"></i>
+                    </div>
+                    <p class="text-gray-500 text-sm">Nothing to Prove by RRR Running Club 15Km at Singajaya Sport Center.</p>
+                    <a href="/gallery" class="text-gray-500 text-xs font-bold uppercase tracking-widest hover:text-neon mt-2">View Gallery -></a>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-12">
+                <button id="toggle-archive-btn" class="group relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-bold text-white transition duration-300 ease-out border border-neon rounded-full shadow-md group w-64">
+                    <span id="btn-slide-bg" class="absolute inset-0 flex items-center justify-center w-full h-full text-black duration-300 -translate-x-full bg-neon group-hover:translate-x-0 ease">
+                        <i id="btn-icon-hover" class="fas fa-arrow-down"></i>
+                    </span>
+                    <span id="btn-text" class="absolute flex items-center justify-center w-full h-full text-neon transition-all duration-300 transform group-hover:translate-x-full ease">Load Full Archive</span>
+                    <span class="relative invisible">Load Full Archive</span>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-black py-16 border-t border-white/10 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            
+            <div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                <img src="/assets/logorrr.png" alt="RRR Logo" class="h-10 md:h-12 w-auto object-contain">
+                <div>
+                    <a href="/" class="text-3xl md:text-4xl font-display uppercase italic text-white hover:text-white">RRR<span class="text-neon">.CLUB</span></a>
+                    <p class="text-gray-500 text-xs uppercase tracking-widest mt-2">South Malang, Indonesia</p>
+                </div>
+            </div>
+
+            <div class="flex gap-6">
+                <a href="https://www.instagram.com/run.r3n_run" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-neon hover:text-black hover:border-neon transition"><i class="fab fa-instagram text-lg md:text-xl"></i></a>
+                <a href="https://www.tiktok.com/@run.r3n_run" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-neon hover:text-black hover:border-neon transition"><i class="fab fa-tiktok text-lg md:text-xl"></i></a>
+                <a href="https://open.spotify.com/user/31viteyj6wkfglehnm6rfc5l4ji4?si=ccda9369c2584d8b&nd=1&dlsi=f767dabe86a44db3" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-[#1DB954] hover:text-black hover:border-[#1DB954] transition"><i class="fab fa-spotify text-lg md:text-xl"></i></a>
+                <a href="mailto:triple3run@gmail.com" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-700 flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white transition"><i class="fas fa-envelope text-lg md:text-xl"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-12 text-gray-700 text-xs uppercase tracking-widest">© 2026 RRR Running Club. All Rights Reserved.</div>
+    </footer>
+
+    <script>
+        // --- MOBILE MENU LOGIC (NEW) ---
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('overflow-hidden'); // Prevent background scrolling
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+
+        // --- CUSTOM CURSOR LOGIC ---
+        const cursorDot = document.getElementById("cursor-dot");
+        const cursorOutline = document.getElementById("cursor-outline");
+        window.addEventListener("mousemove", function (e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
+        });
+
+        // --- TOGGLE ARCHIVE FUNCTIONALITY ---
+        const toggleBtn = document.getElementById('toggle-archive-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnIconHover = document.getElementById('btn-icon-hover');
+        const extraItems = document.querySelectorAll('.extra-item');
+        const archiveSection = document.getElementById('archive-section');
+        
+        let isExpanded = false;
+
+        toggleBtn.addEventListener('click', function() {
+            if (!isExpanded) {
+                // EXPAND: Show items
+                extraItems.forEach((item, index) => {
+                    item.classList.remove('hidden');
+                    item.classList.add('flex', 'fade-in');
+                    item.style.animationDelay = `${index * 0.1}s`;
+                });
+
+                // Update Button State
+                btnText.textContent = "Close Archive";
+                btnIconHover.classList.remove('fa-arrow-down');
+                btnIconHover.classList.add('fa-times'); // Change icon to X
+                
+                isExpanded = true;
+            } else {
+                // COLLAPSE: Hide items
+                extraItems.forEach(item => {
+                    item.classList.add('hidden');
+                    item.classList.remove('flex', 'fade-in');
+                    item.style.animationDelay = '0s'; // Reset delay
+                });
+
+                // Update Button State
+                btnText.textContent = "Load Full Archive";
+                btnIconHover.classList.remove('fa-times');
+                btnIconHover.classList.add('fa-arrow-down'); // Change icon back to Arrow
+
+                // Scroll user back to the top of the section gracefully
+                archiveSection.scrollIntoView({ behavior: 'smooth' });
+
+                isExpanded = false;
+            }
+        });
+    </script>
+</body>
+</html>
